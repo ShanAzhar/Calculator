@@ -97,20 +97,21 @@ class MainActivity : AppCompatActivity() {
     private fun performOperation(operator: String) {
         val currentText = binding.tvResult.text.toString()
         val lastChar = currentText.lastOrNull()
-        if (currentText.isNotEmpty() && lastChar !in listOf('+', '-', '*', '/') && operator != "-") {
-            // If the last character is not an operator and the new operator is not '-', append it
+        if (currentText.isNotEmpty() && lastChar !in listOf('+', '-', '*', '/','%')) {
             binding.tvResult.append(operator)
-        } else if (currentText.isNotEmpty() && lastChar in listOf('+', '-', '*', '/') && operator == "-") {
-            // If the last character is an operator and the new operator is '-', append it
+        } else if (currentText.isNotEmpty() && operator == "-" && lastChar !in listOf('+', '-', '*', '/','%')) {
+
             binding.tvResult.append(operator)
-        } else if (currentText.isNotEmpty() && lastChar !in listOf('+', '-', '*', '/') && operator == "-") {
-            // If the last character is not an operator and the new operator is '-', append it
-            binding.tvResult.append(operator)
-        } else if (currentText.isNotEmpty() && lastChar in listOf('+', '*', '/')) {
-            // If the last character is not '-' and the new operator is '+', '*', or '/', replace it
+        } else if (currentText.isNotEmpty() && lastChar in listOf('+', '*', '/','%')) {
+
             binding.tvResult.text = currentText.dropLast(1) + operator
         }
     }
+
+
+
+
+
 
     private fun calculateResult() {
         try {
@@ -133,8 +134,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun evaluateExpression(expression: String): Double {
-        val numbers = expression.split("[+\\-*/]".toRegex())
+        val numbers = expression.split("[+\\-*/%]".toRegex())
         val operators = expression.split("\\d+".toRegex()).filter { it.isNotEmpty() }
+
 
         var result = numbers[0].toDouble()
 
@@ -146,6 +148,7 @@ class MainActivity : AppCompatActivity() {
                 "-" -> result -= number
                 "*" -> result *= number
                 "/" -> result /= number
+                "%" -> result %= number
             }
         }
 
